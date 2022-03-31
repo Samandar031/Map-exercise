@@ -96,6 +96,7 @@ class App {
           )
           .openPopup();
 
+        // bir = marker.getlatlng();
         c++;
         console.log(c);
         // ikkinchi nuqta
