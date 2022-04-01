@@ -17,10 +17,6 @@ let kordinata;
 let map;
 let c = 1;
 
-let bir;
-let ikki;
-let birMarker;
-
 // class Mashq {
 //   date = new Date();
 //   id = (Date.now() + '').slice(-8);
@@ -48,12 +44,18 @@ let birMarker;
 //   }
 
 // }
+let bir;
+let ikki;
+let uchu;
+let tort;
+let birMarker;
+let ikkiMarker;
 
 class App {
   #mashqlar = [];
   constructor() {
     this._getCurrentPosition();
-    this._birinchiNuqta();
+    // this._birinchiNuqta();
   }
   // 1-qayerda turganimizni aniqlab olamiz
   _getCurrentPosition() {
@@ -76,12 +78,17 @@ class App {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
+
+    this._ikkinchiNuqta(this);
+    this._birinchiNuqta();
   }
 
   _birinchiNuqta() {
     document.addEventListener('keydown', function (e) {
       console.log(e);
       if (e.key == 'Enter' && c == 1) {
+        c++;
+
         birMarker = L.marker([a, b], {
           draggable: true,
         })
@@ -102,79 +109,78 @@ class App {
           .openPopup();
 
         // bir = marker.getlatlng();
-        c++;
+
         console.log(c);
-        // ikkinchi nuqta
-        document.addEventListener('keydown', function (e) {
-          let b = e;
-          kordinata = [a, b];
-          if (c == 2) {
-            c++;
-            L.marker([a, b], {
-              draggable: false,
-            })
-              .addTo(map)
-              .bindPopup(
-                L.popup({
-                  maxWidth: 250,
-                  minWidth: 50,
-                  autoClose: false,
-                  closeOnClick: false,
-                  className: `cycling-popup`,
-                }).setContent(`Uree2`)
-              )
-              .openPopup();
-          } else if (c == 3) {
-            b._ochiribYoqish();
-          }
-        });
       }
     });
   }
 
-  _ochiribYoqish() {
-    L.marker([bir, ikki]),
-      {
-        draggable: false,
-        // icon: greenIcon,
+  _ikkinchiNuqta(e) {
+    let d = e;
+    document.addEventListener('keydown', function (e) {
+      kordinata = [a, b];
+      if (c == 2 && e.key == 'Enter') {
+        c++;
+
+        ikkiMarker = L.marker([a, b], {
+          draggable: false,
+        })
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 50,
+              autoClose: false,
+              closeOnClick: false,
+              className: `running-popup`,
+            }).setContent(`Uree2`)
+          )
+          .openPopup();
+      } else if (c == 3) {
+        d._ochiribYoqish();
       }
-        .addTo(map)
-        .bindPopup(
-          L.popup({
-            maxWidth: 250,
-            minWidth: 50,
-            autoClose: false,
-            closeOnClick: false,
-            className: 'cycling-popup',
-          }).setContent('ikkinchi copy')
-        )
-        .openPopup();
+    });
+    // this._ikkinchiNuqta();
+  }
+
+  // 3.ikkinchi nuqtani olib shu joyga yangisini yaratish
+  _ochiribYoqish() {
+    L.marker([bir, ikki], {
+      draggable: false,
+    })
+      .addTo(map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 50,
+          autoClose: false,
+          closeOnClick: false,
+          className: 'running-popup',
+        }).setContent('ikkinchi sariq nuqta')
+      )
+      .openPopup();
 
     map.removeLayer(birMarker);
   }
 
-  // _ikkinchiNuqta() {
-  //   document.addEventListener('keydown', function (e) {
-  //     kordinata = [a, b];
-  //     if (c == 2) {
-  //       L.marker([a, b], {
-  //         draggable: false,
-  //       })
-  //         .addTo(map)
-  //         .bindPopup(
-  //           L.popup({
-  //             maxWidth: 250,
-  //             minWidth: 50,
-  //             autoClose: false,
-  //             closeOnClick: false,
-  //             className: `running-popup`,
-  //           }).setContent(`Uree2`)
-  //         )
-  //         .openPopup();
-  //     }
-  //   });
-  //   this._ikkinchiNuqta();
-  // }
+  // 3.yolni chizish
+  _yolniChizish() {
+    L.Routing.control({
+      waypoints: [L.latLng(bir, ikki), L.latLng(a, b)],
+
+      lineOptions: { styles: [{ color: 'blue', opacity: 1, weight: 5 }] },
+    })
+      .on('routesfound', function (e) {
+        console.log(e.routes[1].summary.totalDistance);
+      })
+      .addTo(map);
+
+    let btn = document.querySelector('.leaflet-routing-container');
+
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('leaflet-routing-container-hide');
+    });
+  }
 }
 
 let magicMap = new App();
