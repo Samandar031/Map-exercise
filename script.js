@@ -17,6 +17,10 @@ let kordinata;
 let map;
 let c = 1;
 
+let bir;
+let ikki;
+let birMarker;
+
 // class Mashq {
 //   date = new Date();
 //   id = (Date.now() + '').slice(-8);
@@ -78,11 +82,12 @@ class App {
     document.addEventListener('keydown', function (e) {
       console.log(e);
       if (e.key == 'Enter' && c == 1) {
-        L.marker([a, b], {
+        birMarker = L.marker([a, b], {
           draggable: true,
         })
           .on('move', function (e) {
-            console.log(e.latlng);
+            bir = e.latlng.lat;
+            ikki = e.latlng.lng;
           })
           .addTo(map)
           .bindPopup(
@@ -101,6 +106,7 @@ class App {
         console.log(c);
         // ikkinchi nuqta
         document.addEventListener('keydown', function (e) {
+          let b = e;
           kordinata = [a, b];
           if (c == 2) {
             c++;
@@ -118,10 +124,33 @@ class App {
                 }).setContent(`Uree2`)
               )
               .openPopup();
+          } else if (c == 3) {
+            b._ochiribYoqish();
           }
         });
       }
     });
+  }
+
+  _ochiribYoqish() {
+    L.marker([bir, ikki]),
+      {
+        draggable: false,
+        // icon: greenIcon,
+      }
+        .addTo(map)
+        .bindPopup(
+          L.popup({
+            maxWidth: 250,
+            minWidth: 50,
+            autoClose: false,
+            closeOnClick: false,
+            className: 'cycling-popup',
+          }).setContent('ikkinchi copy')
+        )
+        .openPopup();
+
+    map.removeLayer(birMarker);
   }
 
   // _ikkinchiNuqta() {
