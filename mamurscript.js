@@ -51,6 +51,7 @@ class AppProject {
     this._secondPoint(this);
     this._firstPoint();
   }
+  // 2.BIRINCHI nuqta
   _firstPoint() {
     window.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
@@ -80,6 +81,7 @@ class AppProject {
       }
     });
   }
+  // 3.ikkinchinchi nuqta
   _secondPoint(e) {
     let b = e;
     window.addEventListener('keydown', function (e) {
@@ -87,7 +89,7 @@ class AppProject {
         if (number == 3) {
           number++;
           ikkiMarker = L.marker([latitude, longitude], {
-            draggable: true,
+            draggable: false,
           })
             .on('move', function (e) {
               tochkaniLati2 = e.latlng.lat;
@@ -106,6 +108,7 @@ class AppProject {
             )
             .openPopup();
         } else if (number == 4) {
+          number++;
           b._yolniChizish();
           b._draggableFalse();
         }
@@ -142,17 +145,17 @@ class AppProject {
 
     map.removeLayer(birMarker);
 
-    console.log(tochkaniLati1);
-    console.log(tochkaniLongi1);
-    console.log(tochkaniLati2);
-    console.log(tochkaniLongi2);
+    // console.log(tochkaniLati1);
+    // console.log(tochkaniLongi1);
+    // console.log(tochkaniLati2);
+    // console.log(tochkaniLongi2);
     // birMarker.draggable.disable;
   }
   _yolniChizish() {
     L.Routing.control({
       waypoints: [
         L.latLng(tochkaniLati1, tochkaniLongi1),
-        L.latLng(tochkaniLati2, tochkaniLongi2),
+        L.latLng(latitude, longitude),
       ],
 
       lineOptions: { styles: [{ color: 'blue', opacity: 1, weight: 5 }] },
@@ -167,6 +170,7 @@ class AppProject {
     btn.addEventListener('click', function () {
       btn.classList.toggle('leaflet-routing-container-hide');
     });
+    console.log(latitude, longitude);
   }
 }
 

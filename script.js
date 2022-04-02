@@ -46,10 +46,11 @@ let c = 1;
 // }
 let bir;
 let ikki;
-let uchu;
+let uch;
 let tort;
 let birMarker;
 let ikkiMarker;
+let greenIcon;
 
 class App {
   #mashqlar = [];
@@ -72,7 +73,7 @@ class App {
     b = e.coords.longitude;
 
     map = L.map('map').setView([a, b], 13);
-    // console.log(map);
+    console.log(map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
@@ -85,11 +86,12 @@ class App {
 
   _birinchiNuqta() {
     document.addEventListener('keydown', function (e) {
-      console.log(e);
+      // console.log(e);
       if (e.key == 'Enter' && c == 1) {
         c++;
 
         birMarker = L.marker([a, b], {
+          icon: greenIcon,
           draggable: true,
         })
           .on('move', function (e) {
@@ -104,14 +106,24 @@ class App {
               autoClose: false,
               closeOnClick: false,
               className: `running-popup`,
-            }).setContent(`Uree`)
+            }).setContent(`One point`)
           )
           .openPopup();
 
         // bir = marker.getlatlng();
 
-        console.log(c);
+        // console.log(c);
       }
+    });
+    greenIcon = new L.Icon({
+      iconUrl:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+      shadowUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
     });
   }
 
@@ -124,7 +136,12 @@ class App {
 
         ikkiMarker = L.marker([a, b], {
           draggable: false,
+          icon: greenIcon,
         })
+          .on('move', function (e) {
+            uch = e.latLng.lat;
+            tort = e.latLng.lng;
+          })
           .addTo(map)
           .bindPopup(
             L.popup({
@@ -133,14 +150,29 @@ class App {
               autoClose: false,
               closeOnClick: false,
               className: `running-popup`,
-            }).setContent(`Uree2`)
+            }).setContent(`second point`)
           )
           .openPopup();
       } else if (c == 3) {
+        c++;
+        d._yolniChizish();
         d._ochiribYoqish();
+        // console.log(bir);
+        // console.log(ikki);
+        // console.log(a);
+        // console.log(tort);
       }
     });
-    // this._ikkinchiNuqta();
+    greenIcon = new L.Icon({
+      iconUrl:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+      shadowUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
   }
 
   // 3.ikkinchi nuqtani olib shu joyga yangisini yaratish
@@ -165,6 +197,10 @@ class App {
 
   // 3.yolni chizish
   _yolniChizish() {
+    console.log(bir);
+    console.log(ikki);
+    console.log(a);
+    console.log(b);
     L.Routing.control({
       waypoints: [L.latLng(bir, ikki), L.latLng(a, b)],
 
@@ -189,4 +225,4 @@ setTimeout(function () {
   console.log(a, b);
 }, 3000);
 
-console.log(c);
+// console.log(c);
